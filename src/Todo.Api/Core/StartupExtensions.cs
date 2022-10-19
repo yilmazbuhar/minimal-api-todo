@@ -36,8 +36,12 @@ namespace Todo.Api
 
         public static WebApplication RegisterEndPoints(this WebApplication app)
         {
-            app.MapPost("/todoitem", async (IValidator<TodoItem> Validator, TodoItem todo, TodoDbContext db) =>
+            app.MapPost("/todoitem", async (Validator<TodoItem> validator, TodoItem todo, TodoDbContext db) =>
             {
+                var (isValid, value, errors) = validator;
+                if (!isValid)
+                    return Results.BadRequest(errors);
+
                 db.TodoItem.FirstOrDefault();
                 await db.SaveChangesAsync();
 
