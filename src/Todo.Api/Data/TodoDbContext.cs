@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-class TodoDbContext : Microsoft.EntityFrameworkCore.DbContext
+public class TodoDbContext : DbContext
 {
     public TodoDbContext(DbContextOptions<TodoDbContext> options)
         : base(options) { 
     }
 
-    public Microsoft.EntityFrameworkCore.DbSet<TodoItem> TodoItem => Set<TodoItem>();
+    public DbSet<TodoItem> TodoItem => Set<TodoItem>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
