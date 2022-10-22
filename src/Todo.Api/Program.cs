@@ -11,7 +11,7 @@ builder.Services.AddServices();
 
 var app = builder.Build();
 
-app.AddSwagger()
+app.UseSwaggerEndPoints()
     .RegisterEndPoints();
 
 app.Run();
