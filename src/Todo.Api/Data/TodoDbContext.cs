@@ -3,7 +3,10 @@
 public class TodoDbContext : DbContext
 {
     public TodoDbContext(DbContextOptions<TodoDbContext> options)
-        : base(options) { 
+        : base(options)
+    {
+        if (!this.Database.EnsureCreated())
+            this.Database.Migrate();
     }
 
     public DbSet<TodoItem> TodoItem => Set<TodoItem>();
