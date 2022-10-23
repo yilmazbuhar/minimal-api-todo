@@ -13,4 +13,5 @@ services:
             ACCEPT_EULA: "Y"
             MSSQL_PID: "Express"
         ports:
+            #to access with mssm from host
             - "1433:1433"

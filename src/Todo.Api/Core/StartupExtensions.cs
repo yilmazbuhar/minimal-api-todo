@@ -95,11 +95,11 @@ namespace Todo.Api
         /// <returns></returns>
         public static WebApplication UseSwaggerEndPoints(this WebApplication app)
         {
-            if (app.Environment.IsDevelopment())
-            {
+            //if (app.Environment.IsDevelopment())
+            //{
                 app.UseSwagger();
                 app.UseSwaggerUI();
-            }
+            //}
 
             return app;
         }

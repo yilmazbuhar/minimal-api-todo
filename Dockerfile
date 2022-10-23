@@ -1,6 +1,6 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
 WORKDIR /todoapi
-EXPOSE 5040
+EXPOSE 5005
 
 # Copy everything
 COPY . ./
