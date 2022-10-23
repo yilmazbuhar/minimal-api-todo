@@ -18,7 +18,7 @@ namespace Todo.App
         public Guid Id { get; set; }
     }
 
-    public class GetTodoItemsRequestHandler : 
+    public class GetTodoItemsRequestHandler :
         IRequestHandler<GetTodoItemsRequest, List<TodoItem>>,
         IRequestHandler<GetTodoItemByIdRequest, TodoItem>
     {
@@ -28,10 +28,16 @@ namespace Todo.App
             _todoDbContext = todoDbContext;
         }
 
-        public async Task<List<TodoItem>> Handle(GetTodoItemsRequest request, CancellationToken cancellationToken) =>
-            await _todoDbContext.TodoItem.Where(ti => !ti.Done && (request.OnlyOverdue && ti.DueDate<DateTime.Now)).ToListAsync();
+        public async Task<List<TodoItem>> Handle(GetTodoItemsRequest request, CancellationToken cancellationToken)
+        {
+            var query = _todoDbContext.TodoItem.Where(ti => !ti.Done);
+            if (request.OnlyOverdue)
+                query = query.Where(ti => ti.DueDate < DateTime.Now);
+
+            return await query.ToListAsync();
+        }
 
         public async Task<TodoItem> Handle(GetTodoItemByIdRequest request, CancellationToken cancellationToken) =>
-            await _todoDbContext.TodoItem.FindAsync(request.Id);
+                await _todoDbContext.TodoItem.FindAsync(request.Id);
     }
 }

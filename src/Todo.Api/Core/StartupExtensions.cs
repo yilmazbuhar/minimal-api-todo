@@ -6,6 +6,7 @@ using FluentValidation.Results;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
+using System.Reflection;
 
 namespace Todo.Api
 {
@@ -43,15 +44,9 @@ namespace Todo.Api
                 opt.UseSqlServer(configuration.GetConnectionString("SqlServerLaptop"));
             });
 
-            services.AddMediatR(typeof(Program));
+            services.AddMediatR(Assembly.GetExecutingAssembly());
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddValidatorsFromAssemblyContaining<Program>();
-            //services.AddScoped<IValidator<TodoItemSaveModel>, TodoItemValidator>();
-            //services.AddScoped<IValidator<TodoItemUpdateModel>, TodoItemValidator>();
-            //IValidator<TodoItemUpdateModel> validator
-            services.AddValidatorsFromAssemblyContaining<Program>();
-
-            // Add services to the container.
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
@@ -111,6 +106,11 @@ namespace Todo.Api
             app.MapGet("/todoitem/{overdue}", async (bool overdue, IMediator mediator) =>
             {
                 return Results.Ok(await mediator.Send(new GetTodoItemsRequest(overdue)));
+            });
+
+            app.MapGet("/todoitem/detail/{id}", async (Guid id, IMediator mediator) =>
+            {
+                return Results.Ok(await mediator.Send(new GetTodoItemByIdRequest() { Id = id }));
             });
 
             app.MapDelete("/todoitem/{id}", async (Guid id, IMediator mediator) =>

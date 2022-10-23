@@ -6,7 +6,7 @@ namespace Todo.Api
     {
         public MappingProfiles()
         {
-            CreateMap<TodoItem, TodoItemSaveModel>();
+            CreateMap<TodoItemSaveModel,TodoItem>();
         }
     }
 }
