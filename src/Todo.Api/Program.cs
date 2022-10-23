@@ -14,6 +14,6 @@ var app = builder.Build();
 app.UseSwaggerEndPoints()
     .RegisterEndPoints();
 
-app.Run();
+app.Run("http://localhost:5005");
 
 
