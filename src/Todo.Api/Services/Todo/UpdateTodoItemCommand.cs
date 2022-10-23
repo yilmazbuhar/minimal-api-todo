@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 
-namespace Todo.App
+namespace Todo.Api
 {
     public class UpdateTodoItemCommand : IRequest<bool>
     {

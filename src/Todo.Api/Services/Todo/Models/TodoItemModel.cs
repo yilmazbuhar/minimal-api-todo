@@ -1,4 +1,4 @@
-﻿namespace Todo.App
+﻿namespace Todo.Api
 {
     public class TodoItemSaveModel
     {

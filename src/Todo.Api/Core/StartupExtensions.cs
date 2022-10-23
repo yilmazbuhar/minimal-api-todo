@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Todo.App;
 using FluentValidation.Results;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
+using AutoMapper;
 
 namespace Todo.Api
 {
@@ -38,12 +40,15 @@ namespace Todo.Api
         {
             services.AddDbContext<TodoDbContext>(opt =>
             {
-                opt.UseSqlServer(configuration.GetConnectionString("SqlServer"));
+                opt.UseSqlServer(configuration.GetConnectionString("SqlServerLaptop"));
             });
+
             services.AddMediatR(typeof(Program));
-            services.AddAutoMapper(typeof(Program));
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddValidatorsFromAssemblyContaining<Program>();
             //services.AddScoped<IValidator<TodoItemSaveModel>, TodoItemValidator>();
+            //services.AddScoped<IValidator<TodoItemUpdateModel>, TodoItemValidator>();
+            //IValidator<TodoItemUpdateModel> validator
             services.AddValidatorsFromAssemblyContaining<Program>();
 
             // Add services to the container.
@@ -79,7 +84,7 @@ namespace Todo.Api
         {
             app.MapPost("/todoitem", async (IValidator<TodoItemSaveModel> validator, TodoItemSaveModel todo, IMediator mediator) =>
             {
-                await validator.Validate<TodoItemSaveModel>(todo, async () =>
+                return await validator.Validate<TodoItemSaveModel>(todo, async () =>
                 {
                     await mediator.Send(new SaveTodoItemCommand(todo));
 
@@ -87,12 +92,12 @@ namespace Todo.Api
                 });
             });
 
-            app.MapPut("/todoitem/{id}", async (IValidator<TodoItemUpdateModel> validator, Guid id, TodoItemUpdateModel todo, IMediator mediator) =>
+            app.MapPut("/todoitem/{id}", async (IValidator<TodoItemUpdateModel> validator, Guid Id, TodoItemUpdateModel todo, IMediator mediator) =>
             {
-                await validator.Validate<TodoItemUpdateModel>(todo, async () =>
+                return await validator.Validate<TodoItemUpdateModel>(todo, async () =>
                 {
-                    return await mediator.Send(new UpdateTodoItemCommand(id, todo)) ?
-                        Results.Ok() : Results.UnprocessableEntity($"todo item with id {id} not found");
+                    return await mediator.Send(new UpdateTodoItemCommand(Id, todo)) ?
+                        Results.Ok() : Results.UnprocessableEntity($"todo item with id {Id} not found");
 
                 });
             });
@@ -105,12 +110,12 @@ namespace Todo.Api
 
             app.MapGet("/todoitem/{overdue}", async (bool overdue, IMediator mediator) =>
             {
-                return await mediator.Send(new GetTodoItemsRequest(overdue));
+                return Results.Ok(await mediator.Send(new GetTodoItemsRequest(overdue)));
             });
 
             app.MapDelete("/todoitem/{id}", async (Guid id, IMediator mediator) =>
             {
-                await mediator.Send(new DeleteTodoItemCommand() { Id = id });
+                return Results.Ok(await mediator.Send(new DeleteTodoItemCommand() { Id = id }));
             });
 
             return app;
