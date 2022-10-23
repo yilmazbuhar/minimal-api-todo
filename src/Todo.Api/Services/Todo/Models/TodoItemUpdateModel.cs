@@ -2,6 +2,6 @@
 {
     public class TodoItemUpdateModel : TodoItemSaveModel
     {
-        public bool Done { get; set; }
+        //public bool Done { get; set; }
     }
 }

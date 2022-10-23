@@ -20,10 +20,14 @@ namespace Todo.App
 
         public async Task<bool> Handle(DeleteTodoItemCommand request, CancellationToken cancellationToken)
         {
+            //var todoItem = await _todoDbContext.TodoItem.FindAsync(request.Id);
+
             if (await _todoDbContext.TodoItem.FindAsync(request.Id) is TodoItem todo)
             {
                 _todoDbContext.TodoItem.Remove(todo);
                 await _todoDbContext.SaveChangesAsync();
+
+                return true;
             }
 
             return false;

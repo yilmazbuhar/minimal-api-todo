@@ -1,16 +1,18 @@
-// Roadmap
- // Apply validator to all endpoints
- // Implement CQRS with MediatR
- // Implement logging
- // Implement opentelemetry OR APM
-
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
 using Todo.Api;
+using static System.Net.Mime.MediaTypeNames;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddServices(builder.Configuration);
+//builder.Services.Configure<ApiBehaviorOptions>(options =>
+//{
+//    options.SuppressModelStateInvalidFilter = true;
+//});
 
 var app = builder.Build();
 
+app.UseExceptionHandler();
 app.UseSwaggerEndPoints()
     .RegisterEndPoints();
 

@@ -11,7 +11,14 @@ public class TodoItemSaveModelValidator : AbstractValidator<TodoItemSaveModel>
     public TodoItemSaveModelValidator()
     {
         RuleFor(m => m.Title).NotEmpty();
-        RuleFor(m => m.DueDate).GreaterThan(DateTime.Now);
+        RuleFor(m => m.DueDate)
+            .Must(BeAValidDate).WithMessage("Due date must be a valid date.")
+            .GreaterThan(DateTime.Now);
+    }
+
+    private bool BeAValidDate(DateTime date)
+    {
+        return !date.Equals(default(DateTime));
     }
 }
 
@@ -20,6 +27,13 @@ public class TodoItemUpdateModelValidator : AbstractValidator<TodoItemUpdateMode
     public TodoItemUpdateModelValidator()
     {
         RuleFor(m => m.Title).NotEmpty();
-        RuleFor(m => m.DueDate).GreaterThan(DateTime.Now);
+        RuleFor(m => m.DueDate)
+            .Must(BeAValidDate).WithMessage("Due date must be a valid date.")
+            .GreaterThan(DateTime.Now);
+    }
+
+    private bool BeAValidDate(DateTime date)
+    {
+        return !date.Equals(default(DateTime));
     }
 }

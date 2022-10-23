@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Todo.Api
 {
-    public class SaveTodoItemCommand : IRequest<bool>
+    public class SaveTodoItemCommand : IRequest<Guid>
     {
         public SaveTodoItemCommand(TodoItemSaveModel todoItem)
         {
@@ -13,7 +13,7 @@ namespace Todo.Api
         public TodoItemSaveModel TodoItem { get; set; }
     }
 
-    public class SaveTodoItemCommandHandler : IRequestHandler<SaveTodoItemCommand, bool>
+    public class SaveTodoItemCommandHandler : IRequestHandler<SaveTodoItemCommand, Guid>
     {
         private readonly TodoDbContext _todoDbContext;
         private readonly IMapper _mapper;
@@ -23,16 +23,16 @@ namespace Todo.Api
             _mapper = mapper;
         }
 
-        public async Task<bool> Handle(SaveTodoItemCommand request, CancellationToken cancellationToken)
+        public async Task<Guid> Handle(SaveTodoItemCommand request, CancellationToken cancellationToken)
         {
             var todoItem = _mapper.Map<TodoItem>(request.TodoItem);
             if (todoItem == null) 
-                return false;
+                return Guid.Empty;
 
             await _todoDbContext.TodoItem.AddAsync(todoItem);
-            var affectedRow = await _todoDbContext.SaveChangesAsync();
+            await _todoDbContext.SaveChangesAsync();
 
-            return affectedRow > 0;
+            return todoItem.Id;
         }
     }
 }
