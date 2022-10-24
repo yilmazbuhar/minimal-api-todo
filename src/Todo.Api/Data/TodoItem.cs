@@ -1,4 +1,6 @@
-﻿public class TodoItem
+﻿namespace Todo.Api;
+
+public class TodoItem
 {
     public Guid Id { get; set; }
     public string Title { get; set; }

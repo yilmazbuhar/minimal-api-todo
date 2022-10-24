@@ -1,7 +1,7 @@
-﻿namespace Todo.Api
+﻿namespace Todo.Api;
+
+public class TodoItemUpdateModel : TodoItemSaveModel
 {
-    public class TodoItemUpdateModel : TodoItemSaveModel
-    {
-        //public bool Done { get; set; }
-    }
+    //public bool Done { get; set; }
 }
+

@@ -1,12 +1,13 @@
 ﻿using AutoMapper;
 
-namespace Todo.Api
+namespace Todo.Api;
+
+public class MappingProfiles : Profile
 {
-    public class MappingProfiles : Profile
+    public MappingProfiles()
     {
-        public MappingProfiles()
-        {
-            CreateMap<TodoItemSaveModel,TodoItem>();
-        }
+        CreateMap<TodoItemSaveModel, TodoItem>();
+        CreateMap<TodoItemUpdateModel, TodoItem>();
     }
 }
+

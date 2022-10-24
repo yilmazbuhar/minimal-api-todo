@@ -1,32 +1,31 @@
 ﻿using AutoMapper;
 using MediatR;
 
-namespace Todo.App
+namespace Todo.Api;
+
+public class SetDoneTodoItemCommand : IRequest<bool>
 {
-    public class SetDoneTodoItemCommand : IRequest<bool>
+    public Guid Id { get; set; }
+}
+
+public class SetDoneTodoItemCommandHandler : IRequestHandler<SetDoneTodoItemCommand, bool>
+{
+    private readonly TodoDbContext _todoDbContext;
+    private readonly IMapper _mapper;
+    public SetDoneTodoItemCommandHandler(TodoDbContext todoDbContext, IMapper mapper)
     {
-        public Guid Id { get; set; }
+        _todoDbContext = todoDbContext;
+        _mapper = mapper;
     }
 
-    public class SetDoneTodoItemCommandHandler : IRequestHandler<SetDoneTodoItemCommand, bool>
+    public async Task<bool> Handle(SetDoneTodoItemCommand request, CancellationToken cancellationToken)
     {
-        private readonly TodoDbContext _todoDbContext;
-        private readonly IMapper _mapper;
-        public SetDoneTodoItemCommandHandler(TodoDbContext todoDbContext, IMapper mapper)
-        {
-            _todoDbContext = todoDbContext;
-            _mapper = mapper;
-        }
+        var todoItem = await _todoDbContext.TodoItem.FindAsync(request.Id);
+        if (todoItem == null)
+            return false;
 
-        public async Task<bool> Handle(SetDoneTodoItemCommand request, CancellationToken cancellationToken)
-        {
-            var todoItem = await _todoDbContext.TodoItem.FindAsync(request.Id);
-            if (todoItem == null)
-                return false;
+        todoItem.Done = true;
 
-            todoItem.Done = true;
-
-            return await _todoDbContext.SaveChangesAsync() > 0;
-        }
+        return await _todoDbContext.SaveChangesAsync() > 0;
     }
 }

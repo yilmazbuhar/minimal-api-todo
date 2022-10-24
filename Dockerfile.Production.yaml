@@ -15,5 +15,5 @@ FROM mcr.microsoft.com/dotnet/aspnet:6.0
 WORKDIR /todoapi
 COPY --from=build-env /todoapi/out .
 
-ENV ASPNETCORE_ENVIRONMENT=Development
+ENV ASPNETCORE_ENVIRONMENT=Production
 ENTRYPOINT ["dotnet", "Todo.Api.dll"]
