@@ -1,4 +1,3 @@
-#!/bin/bash
 cd src
 dotnet clean
 dotnet restore
